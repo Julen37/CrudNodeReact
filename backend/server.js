@@ -15,7 +15,7 @@ const corsOptions = {
     credentials: true, // Autorise l'envoi de cookies, tokens d'auth (headers Authorization), et autres informations d'identification avec les requêtes cross-origin.
 };
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Activation de CORS (Cross-Origin Resource Sharing) pour permettre les requêtes entre domaines
 
 // Création d'une connexion à la bdd MySQL
 const database = mysql.createConnection({
@@ -34,6 +34,20 @@ app.get("/", (req, res) => { //crée un endpoint/route a l'adress "/" et ensuite
         return res.json(data); // Sinon, renvoie les données récupérées
     });
 });
+
+app.post('/create', (req, res) => {
+    const sql = "INSERT INTO student (`name`, `email`) VALUES (?)";
+    const values = [
+        req.body.name,
+        req.body.email
+    ]
+    database.query(sql, [values], (err, data) => {
+        if(err) {
+            return res.status(500).json("Error");
+        }
+        return res.json(data);
+    })
+})
 
 // doit etre tout en bas, toujours
 app.listen(8081, () => { // attribue le port 8081 au serveur et execute une fonction anonyme listen 
