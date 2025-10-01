@@ -1,6 +1,6 @@
 const express = require("express"); // création de const express qui permet d'acceder a express (qui est dans node_modules)
 const cors = require("cors"); // permet aux differents serveurs d'échanger des données entre eux
-const mysql = require("mysql"); 
+const mysql = require("mysql2"); 
 
 const app = express(); // permet d'utiliser les méthodes de l'objet express dans la variable "app"
 
@@ -14,6 +14,8 @@ const corsOptions = {
     headers: 'Content-Type,Authorization', // En-têtes HTTP que le client est autorisé à utiliser dans ses requêtes
     credentials: true, // Autorise l'envoi de cookies, tokens d'auth (headers Authorization), et autres informations d'identification avec les requêtes cross-origin.
 };
+app.use(express.json());
+app.use(cors(corsOptions));
 
 // Création d'une connexion à la bdd MySQL
 const database = mysql.createConnection({
@@ -36,4 +38,4 @@ app.get("/", (req, res) => { //crée un endpoint/route a l'adress "/" et ensuite
 // doit etre tout en bas, toujours
 app.listen(8081, () => { // attribue le port 8081 au serveur et execute une fonction anonyme listen 
     console.log('Server is running on port 8081'); // s'affiche quand il est run
-})
+});
