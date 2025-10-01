@@ -35,14 +35,31 @@ app.get("/", (req, res) => { //crée un endpoint/route a l'adress "/" et ensuite
     });
 });
 
+// Route pour créer un nouvel étudiant
 app.post('/create', (req, res) => {
-    const sql = "INSERT INTO student (`name`, `email`) VALUES (?)";
-    const values = [
+    const sql = "INSERT INTO student (`name`, `email`) VALUES (?)"; // Requête SQL pour insérer un nouvel étudiant
+    const values = [ // Valeurs à insérer
         req.body.name,
         req.body.email
     ]
-    database.query(sql, [values], (err, data) => {
-        if(err) {
+    database.query(sql, [values], (err, data) => { // Exécution de la requête SQL
+        if(err) { // Si une erreur se produit, renvoie un message d'erreur
+            return res.status(500).json("Error");
+        }
+        return res.json(data);
+    })
+})
+
+// Route pour update un étudiant
+app.put('/update/:id', (req, res) => {
+    const sql = "UPDATE student SET `name` = ?, `email` = ? WHERE id = ?"; // Requête SQL pour modifier l'étudiant
+    const values = [ // Valeurs à insérer
+        req.body.name,
+        req.body.email
+    ]
+    const id = req.params.id;
+    database.query(sql, [...values, id], (err, data) => { // Exécution de la requête SQL
+        if(err) { // Si une erreur se produit, renvoie un message d'erreur
             return res.status(500).json("Error");
         }
         return res.json(data);
