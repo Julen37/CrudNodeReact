@@ -66,6 +66,18 @@ app.put('/update/:id', (req, res) => {
     })
 })
 
+// Route pour delete un étudiant
+app.delete('/student/:id', (req, res) => {
+    const sql = "DELETE FROM student WHERE id = ?"; // Requête SQL pour supprimer l'étudiant
+    const id = req.params.id;
+    database.query(sql, [id], (err, data) => { // Exécution de la requête SQL
+        if(err) { // Si une erreur se produit, renvoie un message d'erreur
+            return res.status(500).json("Error");
+        }
+        return res.json(data);
+    })
+})
+
 // doit etre tout en bas, toujours
 app.listen(8081, () => { // attribue le port 8081 au serveur et execute une fonction anonyme listen 
     console.log('Server is running on port 8081'); // s'affiche quand il est run
